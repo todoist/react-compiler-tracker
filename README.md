@@ -109,6 +109,7 @@ npm exec --no -- @todoist/react-compiler-tracker --check-files --show-errors src
 ```
 
 Example output when errors have increased:
+
 ```
 Errors:
     - src/components/Button.tsx: Line 15: Cannot access refs during render (x2)
@@ -120,6 +121,7 @@ Please fix the errors and run the command again.
 ```
 
 When no new errors are introduced, you still see the existing errors:
+
 ```
 Errors:
     - src/components/Button.tsx: Line 15: Cannot access refs during render (x2)
