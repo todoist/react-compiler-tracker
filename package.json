@@ -71,6 +71,6 @@
   },
   "dependencies": {
     "glob": "14.0.6",
-    "minimatch": "11.0.5"
+    "minimatch": "11.0.8"
   }
 }
