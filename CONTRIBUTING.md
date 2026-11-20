@@ -27,6 +27,7 @@ If you intend to change the public API, or make any non-trivial changes to the i
 ## Your First Pull Request
 
 Working on your first Pull Request? You can learn how from this free video series:
+
 -   [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
 
 If you decide to fix an issue, please be sure to check the comment thread in case somebody is already working on a fix. If nobody is working on it at the moment, please leave a comment stating that you intend to work on it so other people don't accidentally duplicate your effort.
@@ -34,6 +35,7 @@ If you decide to fix an issue, please be sure to check the comment thread in cas
 ## Project Setup
 
 Before you can contribute to the codebase, you will need to fork the react-compiler-tracker repository, and the following steps will help you hit the ground running:
+
 1. Fork the repository (click the <kbd>Fork</kbd> button at the top right of [this page](https://github.com/todoist/react-compiler-tracker));
 
 2. Clone your fork locally;
@@ -48,6 +50,7 @@ cd react-compiler-tracker
 ## Development Workflow
 
 After cloning react-compiler-tracker and installing all dependencies, several commands are at your disposal:
+
 -   `npm run build`: Builds the `@todoist/react-compiler-tracker` package for publishing to [npm](https://www.npmjs.com/);
 -   `npm run check`: Validates code quality and types with Biome and TypeScript;
 -   `npm run fix`: Automatically fixes linting issues with Biome;
@@ -63,6 +66,7 @@ The release process for react-compiler-tracker is automated with [release-please
 Pull requests are actively monitored, and only need the approval of one or more core team members. We will review your pull request and either merge it, request changes to it, or close it with an explanation.
 
 Before submitting a pull request, please take the following into consideration:
+
 -   Fork [the repository](https://github.com/todoist/react-compiler-tracker) and create your branch from `main`;
 -   Follow the [Commit Message Guidelines](#commit-message-guidelines) below;
 -   Add tests for code that should be tested (like bug fixes);
@@ -74,6 +78,7 @@ Before submitting a pull request, please take the following into consideration:
 #### Atomic Commits
 
 If possible, make [atomic commits](https://en.wikipedia.org/wiki/Atomic_commit), which means:
+
 -   A commit should not mix whitespace and/or code style changes with functional code changes;
 -   A commit should contain exactly one self-contained functional change;
 -   A commit should not create an inconsistent state (e.g., test errors, linting errors, partial fix, etc.).
