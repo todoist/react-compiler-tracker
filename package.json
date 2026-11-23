@@ -15,7 +15,10 @@
     "fix": "run-s fix:lint fix:format",
     "fix:format": "oxfmt",
     "fix:lint": "oxlint --fix",
-    "build": "rimraf dist && tsc",
+    "build": "run-s clean:* build:package",
+    "build:package": "tsdown",
+    "clean": "run-s clean:*",
+    "clean:dist": "rimraf dist/",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -68,6 +71,7 @@
     "oxlint": "1.94.0",
     "rimraf": "6.1.4",
     "semantic-release": "26.0.1",
+    "tsdown": "0.23.1",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
     "vitest": "5.1.0"
