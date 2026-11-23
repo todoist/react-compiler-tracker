@@ -76,9 +76,13 @@ jobs:
               run: |
                   npm ci
 
-            - name: Check formatting and lint code with Biome
+            - name: Check formatting with Oxfmt
               run: |
-                  npm run check:biome
+                  npm run check:format
+
+            - name: Lint code with Oxlint
+              run: |
+                  npm run check:lint
 
             - name: Perform type checking with TypeScript
               run: |

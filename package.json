@@ -9,10 +9,12 @@
   },
   "scripts": {
     "check": "run-p check:* -c -l",
+    "check:format": "oxfmt --check",
+    "check:lint": "oxlint",
     "check:types": "tsc --noEmit",
-    "check:biome": "biome check",
-    "fix": "run-p fix:* -c -l",
-    "fix:biome": "biome check --write",
+    "fix": "run-s fix:lint fix:format",
+    "fix:format": "oxfmt",
+    "fix:lint": "oxlint --fix",
     "build": "rimraf dist && tsc",
     "prepare": "husky",
     "test": "vitest run",
@@ -51,13 +53,13 @@
     "CHANGELOG.md"
   ],
   "lint-staged": {
-    "*.{js,mjs,ts,json,md}": "biome check --write --no-errors-on-unmatched"
+    "*.{js,mjs,ts}": "oxlint --fix",
+    "*.{js,mjs,ts,json,jsonc,md,yml,yaml}": "oxfmt --no-error-on-unmatched-pattern"
   },
   "devDependencies": {
     "@babel/core": "7.29.13",
     "@babel/preset-react": "7.29.7",
     "@babel/preset-typescript": "7.29.7",
-    "@biomejs/biome": "2.6.8",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "11.0.1",
@@ -68,6 +70,8 @@
     "husky": "9.1.7",
     "lint-staged": "17.6.1",
     "npm-run-all2": "9.0.4",
+    "oxfmt": "0.79.0",
+    "oxlint": "1.94.0",
     "rimraf": "6.1.4",
     "semantic-release": "26.0.1",
     "tsx": "4.23.15",
