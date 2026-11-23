@@ -15,7 +15,11 @@
     "fix": "run-s fix:lint fix:format",
     "fix:format": "oxfmt",
     "fix:lint": "oxlint --fix",
-    "build": "rimraf dist && tsc",
+    "build": "run-s clean:* build:package",
+    "postbuild": "publint",
+    "build:package": "tsdown",
+    "clean": "run-s clean:*",
+    "clean:dist": "rimraf dist/",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -46,10 +50,12 @@
     }
   },
   "files": [
-    "dist",
-    "README.md",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
     "LICENSE",
-    "CHANGELOG.md"
+    "README.md",
+    "dist/**"
   ],
   "devDependencies": {
     "@babel/core": "7.29.13",
@@ -66,8 +72,10 @@
     "npm-run-all2": "9.0.4",
     "oxfmt": "0.79.0",
     "oxlint": "1.94.0",
+    "publint": "0.3.25",
     "rimraf": "6.1.4",
     "semantic-release": "26.0.1",
+    "tsdown": "0.23.7",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
     "vitest": "5.1.0"
