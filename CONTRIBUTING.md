@@ -54,8 +54,8 @@ cd react-compiler-tracker
 After cloning react-compiler-tracker and installing all dependencies, several commands are at your disposal:
 
 - `npm run build`: Builds the `@todoist/react-compiler-tracker` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/todoist/packages?repo_name=react-compiler-tracker);
-- `npm run check`: Validates code quality and types with Biome and TypeScript;
-- `npm run fix`: Automatically fixes linting issues with Biome;
+- `npm run check`: Validates code quality with Oxlint, formatting with Oxfmt, and types with TypeScript;
+- `npm run fix`: Automatically fixes linting issues with Oxlint and formatting with Oxfmt;
 - `npm run test`: Runs all unit tests with Vitest;
 - `npm run test:watch`: Runs tests in watch mode.
 
