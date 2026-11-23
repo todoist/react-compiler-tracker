@@ -101,13 +101,11 @@ function save({
     const recordsFile: Records = {
         recordVersion: RECORD_VERSION,
         'react-compiler-version': reactCompiler.getVersion(),
-        files: Object.entries(newFileRecords)
-            // oxlint-disable-next-line unicorn/no-array-sort
-            .sort(([filePathA], [filePathB]) => filePathA.localeCompare(filePathB))
-            .reduce<Records['files']>((sortedFiles, [filePath, errors]) => {
-                sortedFiles[filePath] = errors
-                return sortedFiles
-            }, {}),
+        files: Object.fromEntries(
+            Object.entries(newFileRecords)
+                // oxlint-disable-next-line unicorn/no-array-sort
+                .sort(([filePathA], [filePathB]) => filePathA.localeCompare(filePathB)),
+        ),
     }
 
     writeFileSync(recordsPath, JSON.stringify(recordsFile, null, 2))
