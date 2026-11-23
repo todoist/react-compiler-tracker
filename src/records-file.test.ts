@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import { getErrorChanges, load, save } from './records-file.js'
 
 vi.mock('node:fs', () => ({

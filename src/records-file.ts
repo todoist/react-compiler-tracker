@@ -56,14 +56,8 @@ function getErrorChanges({
             continue
         }
 
-        const existingErrorCount = Object.values(existingErrors ?? {}).reduce(
-            (total, count) => total + count,
-            0,
-        )
-        const newErrorCount = Object.values(newErrors ?? {}).reduce(
-            (total, count) => total + count,
-            0,
-        )
+        const existingErrorCount = Object.values(existingErrors ?? {}).reduce((total, count) => total + count, 0)
+        const newErrorCount = Object.values(newErrors ?? {}).reduce((total, count) => total + count, 0)
 
         if (newErrorCount > existingErrorCount) {
             changes.increases[filePath] = newErrorCount - existingErrorCount

@@ -1,5 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
+
 import { afterEach, describe, expect, it, vi } from 'vitest'
+
 import { DEFAULT_CONFIG, loadConfig } from './config.js'
 
 vi.mock('node:fs', () => ({

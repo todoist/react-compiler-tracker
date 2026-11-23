@@ -30,7 +30,7 @@ If you intend to change the public API, or make any non-trivial changes to the i
 
 Working on your first Pull Request? You can learn how from this free video series:
 
--   [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
+- [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
 
 If you decide to fix an issue, please be sure to check the comment thread in case somebody is already working on a fix. If nobody is working on it at the moment, please leave a comment stating that you intend to work on it so other people don't accidentally duplicate your effort.
 
@@ -53,11 +53,11 @@ cd react-compiler-tracker
 
 After cloning react-compiler-tracker and installing all dependencies, several commands are at your disposal:
 
--   `npm run build`: Builds the `@todoist/react-compiler-tracker` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/todoist/packages?repo_name=react-compiler-tracker);
--   `npm run check`: Validates code quality and types with Biome and TypeScript;
--   `npm run fix`: Automatically fixes linting issues with Biome;
--   `npm run test`: Runs all unit tests with Vitest;
--   `npm run test:watch`: Runs tests in watch mode.
+- `npm run build`: Builds the `@todoist/react-compiler-tracker` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/todoist/packages?repo_name=react-compiler-tracker);
+- `npm run check`: Validates code quality and types with Biome and TypeScript;
+- `npm run fix`: Automatically fixes linting issues with Biome;
+- `npm run test`: Runs all unit tests with Vitest;
+- `npm run test:watch`: Runs tests in watch mode.
 
 ### Release Process (core team only)
 
@@ -69,11 +69,11 @@ To test features before publishing a stable release:
 
 1. **Sync `next` with `main`** before starting new work, and after each stable release (required for `semantic-release` to correctly initiate the next pre-release versioning cycle):
 
-   ```sh
-   git checkout next
-   git merge main -m "chore: sync next with main [skip ci]"
-   git push origin next
-   ```
+    ```sh
+    git checkout next
+    git merge main -m "chore: sync next with main [skip ci]"
+    git push origin next
+    ```
 
 2. **Develop on a feature branch** based off `next` and open a PR targeting `next`.
 
@@ -89,11 +89,11 @@ Pull requests are actively monitored, and only need the approval of one or more 
 
 Before submitting a pull request, please take the following into consideration:
 
--   Fork [the repository](https://github.com/todoist/react-compiler-tracker) and create your branch from `main`;
--   Follow the [Commit Message Guidelines](#commit-message-guidelines) below;
--   Add tests for code that should be tested (like bug fixes);
--   Ensure the test suite passes with flying colours;
--   Do not override built-in validation and formatting checks.
+- Fork [the repository](https://github.com/todoist/react-compiler-tracker) and create your branch from `main`;
+- Follow the [Commit Message Guidelines](#commit-message-guidelines) below;
+- Add tests for code that should be tested (like bug fixes);
+- Ensure the test suite passes with flying colours;
+- Do not override built-in validation and formatting checks.
 
 ### Commit Message Guidelines
 
@@ -101,9 +101,9 @@ Before submitting a pull request, please take the following into consideration:
 
 If possible, make [atomic commits](https://en.wikipedia.org/wiki/Atomic_commit), which means:
 
--   A commit should not mix whitespace and/or code style changes with functional code changes;
--   A commit should contain exactly one self-contained functional change;
--   A commit should not create an inconsistent state (e.g., test errors, linting errors, partial fix, etc.).
+- A commit should not mix whitespace and/or code style changes with functional code changes;
+- A commit should contain exactly one self-contained functional change;
+- A commit should not create an inconsistent state (e.g., test errors, linting errors, partial fix, etc.).
 
 #### Commit Message Format
 
@@ -129,9 +129,9 @@ The commit **header** (subject line) and footer metadata — including `BREAKING
 
 When squash-merging a PR, GitHub lets you edit the commit message and extended description. Keep the following in mind:
 
--   The **commit message** (header) becomes the entry under its type section (e.g., Features, Bug Fixes).
--   A `BREAKING CHANGE:` **footer** in the extended description becomes a separate entry in the Breaking Changes section. Use it to describe the impact for consumers.
--   Using `!` in the header without a `BREAKING CHANGE:` footer will duplicate the subject line in both the type section and the Breaking Changes section. To avoid this, always include a `BREAKING CHANGE:` footer with a distinct description when introducing breaking changes.
+- The **commit message** (header) becomes the entry under its type section (e.g., Features, Bug Fixes).
+- A `BREAKING CHANGE:` **footer** in the extended description becomes a separate entry in the Breaking Changes section. Use it to describe the impact for consumers.
+- Using `!` in the header without a `BREAKING CHANGE:` footer will duplicate the subject line in both the type section and the Breaking Changes section. To avoid this, always include a `BREAKING CHANGE:` footer with a distinct description when introducing breaking changes.
 
 ## License
 

@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process'
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+
 import { afterEach, describe, expect, it } from 'vitest'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -47,13 +48,9 @@ describe('CLI', () => {
 
             expect(output).toContain('Found 4 React Compiler issues')
             expect(output).toContain('Errors:')
-            expect(output).toContain(
-                'src/bad-hook.ts: Line 9: Cannot access refs during render (x2)',
-            )
+            expect(output).toContain('src/bad-hook.ts: Line 9: Cannot access refs during render (x2)')
             expect(output).toContain('src/bad-hook.ts: Line 10: Cannot access refs during render')
-            expect(output).toContain(
-                'src/bad-component.tsx: Line 9: Hooks must always be called in a consistent order',
-            )
+            expect(output).toContain('src/bad-component.tsx: Line 9: Hooks must always be called in a consistent order')
         })
     })
 
@@ -90,9 +87,7 @@ describe('CLI', () => {
 
             expect(output).toContain('React Compiler errors have increased')
             expect(output).toContain('Errors:')
-            expect(output).toContain(
-                'src/bad-hook.ts: Line 9: Cannot access refs during render (x2)',
-            )
+            expect(output).toContain('src/bad-hook.ts: Line 9: Cannot access refs during render (x2)')
             expect(output).toContain('src/bad-hook.ts: Line 10: Cannot access refs during render')
         })
 
@@ -101,9 +96,7 @@ describe('CLI', () => {
             const output = runCLI(['--check-files', '--show-errors', 'src/bad-hook.ts'])
 
             expect(output).toContain('Errors:')
-            expect(output).toContain(
-                'src/bad-hook.ts: Line 9: Cannot access refs during render (x2)',
-            )
+            expect(output).toContain('src/bad-hook.ts: Line 9: Cannot access refs during render (x2)')
             expect(output).toContain('src/bad-hook.ts: Line 10: Cannot access refs during render')
             expect(output).not.toContain('React Compiler errors have increased')
             expect(output).toContain('✅ No new React Compiler errors')
@@ -114,9 +107,7 @@ describe('CLI', () => {
         it('accepts --overwrite flag', () => {
             const output = runCLI(['--overwrite'])
 
-            expect(output).toContain(
-                '🔍 Checking all 5 source files for React Compiler errors and recreating records…',
-            )
+            expect(output).toContain('🔍 Checking all 5 source files for React Compiler errors and recreating records…')
             expect(output).toContain(
                 '✅ Records saved to .react-compiler.rec.json. Found 4 total React Compiler issues across 2 files',
             )
@@ -139,13 +130,9 @@ describe('CLI', () => {
 
             expect(output).toContain('Records saved to')
             expect(output).toContain('Errors:')
-            expect(output).toContain(
-                'src/bad-hook.ts: Line 9: Cannot access refs during render (x2)',
-            )
+            expect(output).toContain('src/bad-hook.ts: Line 9: Cannot access refs during render (x2)')
             expect(output).toContain('src/bad-hook.ts: Line 10: Cannot access refs during render')
-            expect(output).toContain(
-                'src/bad-component.tsx: Line 9: Hooks must always be called in a consistent order',
-            )
+            expect(output).toContain('src/bad-component.tsx: Line 9: Hooks must always be called in a consistent order')
         })
     })
 
@@ -157,15 +144,9 @@ describe('CLI', () => {
         })
 
         it('checks provided files and reports increased errors', () => {
-            const output = runCLI([
-                '--stage-record-file',
-                'src/bad-component.tsx',
-                'src/bad-hook.ts',
-            ])
+            const output = runCLI(['--stage-record-file', 'src/bad-component.tsx', 'src/bad-hook.ts'])
 
-            expect(output).toContain(
-                '🔍 Checking 2 files for React Compiler errors and updating records…',
-            )
+            expect(output).toContain('🔍 Checking 2 files for React Compiler errors and updating records…')
             expect(output).toContain('React Compiler errors have increased in:')
             expect(output).toContain('• src/bad-component.tsx: +1')
             expect(output).toContain('• src/bad-hook.ts: +3')
@@ -176,9 +157,7 @@ describe('CLI', () => {
 
             expect(output).toContain('React Compiler errors have increased')
             expect(output).toContain('Errors:')
-            expect(output).toContain(
-                'src/bad-hook.ts: Line 9: Cannot access refs during render (x2)',
-            )
+            expect(output).toContain('src/bad-hook.ts: Line 9: Cannot access refs during render (x2)')
             expect(output).toContain('src/bad-hook.ts: Line 10: Cannot access refs during render')
         })
 
@@ -187,9 +166,7 @@ describe('CLI', () => {
             const output = runCLI(['--stage-record-file', '--show-errors', 'src/bad-hook.ts'])
 
             expect(output).toContain('Errors:')
-            expect(output).toContain(
-                'src/bad-hook.ts: Line 9: Cannot access refs during render (x2)',
-            )
+            expect(output).toContain('src/bad-hook.ts: Line 9: Cannot access refs during render (x2)')
             expect(output).toContain('src/bad-hook.ts: Line 10: Cannot access refs during render')
             expect(output).not.toContain('React Compiler errors have increased')
         })
@@ -199,15 +176,9 @@ describe('CLI', () => {
             runCLI(['--overwrite'])
 
             // Then check staged files - should pass since errors match records
-            const output = runCLI([
-                '--stage-record-file',
-                'src/bad-component.tsx',
-                'src/good-component.tsx',
-            ])
+            const output = runCLI(['--stage-record-file', 'src/bad-component.tsx', 'src/good-component.tsx'])
 
-            expect(output).toContain(
-                '🔍 Checking 2 files for React Compiler errors and updating records…',
-            )
+            expect(output).toContain('🔍 Checking 2 files for React Compiler errors and updating records…')
             // The staging step may fail in test environment due to gitignore,
             // but the important thing is that error checking passed
             expect(output).not.toContain('React Compiler errors have increased')

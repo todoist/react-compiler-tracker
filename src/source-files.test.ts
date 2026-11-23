@@ -1,14 +1,10 @@
 import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
+
 import { glob } from 'glob'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import {
-    filterByGlob,
-    getAll,
-    normalizeFilePaths,
-    partitionByExistence,
-    validateFilesExist,
-} from './source-files.js'
+
+import { filterByGlob, getAll, normalizeFilePaths, partitionByExistence, validateFilesExist } from './source-files.js'
 
 vi.mock('node:child_process', () => ({
     execSync: vi.fn(),
@@ -54,10 +50,7 @@ describe('normalizeFilePaths', () => {
     it('strips prefix from matching paths', () => {
         vi.mocked(execSync).mockReturnValue('apps/frontend/\n')
 
-        const result = normalizeFilePaths([
-            'apps/frontend/src/App.tsx',
-            'apps/frontend/src/utils/helper.ts',
-        ])
+        const result = normalizeFilePaths(['apps/frontend/src/App.tsx', 'apps/frontend/src/utils/helper.ts'])
 
         expect(result).toEqual(['src/App.tsx', 'src/utils/helper.ts'])
     })
@@ -73,11 +66,7 @@ describe('normalizeFilePaths', () => {
     it('handles mixed paths (some matching, some not)', () => {
         vi.mocked(execSync).mockReturnValue('apps/frontend/\n')
 
-        const result = normalizeFilePaths([
-            'apps/frontend/src/App.tsx',
-            'src/local.ts',
-            'apps/frontend/index.ts',
-        ])
+        const result = normalizeFilePaths(['apps/frontend/src/App.tsx', 'src/local.ts', 'apps/frontend/index.ts'])
 
         expect(result).toEqual(['src/App.tsx', 'src/local.ts', 'index.ts'])
     })
@@ -251,9 +240,7 @@ describe('validateFilesExist', () => {
     it('throws error when file does not exist', () => {
         vi.mocked(existsSync).mockReturnValue(false)
 
-        expect(() => validateFilesExist(['nonexistent.tsx'])).toThrow(
-            'File not found: nonexistent.tsx',
-        )
+        expect(() => validateFilesExist(['nonexistent.tsx'])).toThrow('File not found: nonexistent.tsx')
     })
 
     it('does not throw when all files exist', () => {
@@ -265,24 +252,15 @@ describe('validateFilesExist', () => {
     it('throws on first missing file', () => {
         vi.mocked(existsSync).mockImplementation((path) => path === 'exists.tsx')
 
-        expect(() => validateFilesExist(['exists.tsx', 'missing.tsx'])).toThrow(
-            'File not found: missing.tsx',
-        )
+        expect(() => validateFilesExist(['exists.tsx', 'missing.tsx'])).toThrow('File not found: missing.tsx')
     })
 })
 
 describe('partitionByExistence', () => {
     it('partitions files into existing and deleted sets', () => {
-        vi.mocked(existsSync).mockImplementation(
-            (path) => path === 'exists1.tsx' || path === 'exists2.tsx',
-        )
+        vi.mocked(existsSync).mockImplementation((path) => path === 'exists1.tsx' || path === 'exists2.tsx')
 
-        const result = partitionByExistence([
-            'exists1.tsx',
-            'deleted.tsx',
-            'exists2.tsx',
-            'also-deleted.tsx',
-        ])
+        const result = partitionByExistence(['exists1.tsx', 'deleted.tsx', 'exists2.tsx', 'also-deleted.tsx'])
 
         expect(result.existing).toEqual(['exists1.tsx', 'exists2.tsx'])
         expect(result.deleted).toEqual(['deleted.tsx', 'also-deleted.tsx'])
