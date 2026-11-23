@@ -1,5 +1,7 @@
-import { type TransformOptions, transformFileAsync } from '@babel/core'
+import { transformFileAsync } from '@babel/core'
+
 import type { Logger } from 'babel-plugin-react-compiler'
+import type { TransformOptions } from '@babel/core'
 
 function createConfig(logger: Logger): TransformOptions {
     return {

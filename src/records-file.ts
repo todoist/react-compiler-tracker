@@ -56,14 +56,8 @@ function getErrorChanges({
             continue
         }
 
-        const existingErrorCount = Object.values(existingErrors ?? {}).reduce(
-            (total, count) => total + count,
-            0,
-        )
-        const newErrorCount = Object.values(newErrors ?? {}).reduce(
-            (total, count) => total + count,
-            0,
-        )
+        const existingErrorCount = Object.values(existingErrors ?? {}).reduce((total, count) => total + count, 0)
+        const newErrorCount = Object.values(newErrors ?? {}).reduce((total, count) => total + count, 0)
 
         if (newErrorCount > existingErrorCount) {
             changes.increases[filePath] = newErrorCount - existingErrorCount
@@ -107,12 +101,11 @@ function save({
     const recordsFile: Records = {
         recordVersion: RECORD_VERSION,
         'react-compiler-version': reactCompiler.getVersion(),
-        files: Object.entries(newFileRecords)
-            .sort(([filePathA], [filePathB]) => filePathA.localeCompare(filePathB))
-            .reduce<Records['files']>((records, [filePath, errors]) => {
-                records[filePath] = errors
-                return records
-            }, {}),
+        files: Object.fromEntries(
+            Object.entries(newFileRecords)
+                // oxlint-disable-next-line unicorn/no-array-sort
+                .sort(([filePathA], [filePathB]) => filePathA.localeCompare(filePathB)),
+        ),
     }
 
     writeFileSync(recordsPath, JSON.stringify(recordsFile, null, 2))

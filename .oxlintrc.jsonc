@@ -1,0 +1,34 @@
+{
+    "$schema": "./node_modules/oxlint/configuration_schema.json",
+    "ignorePatterns": ["dist/*", "**/node_modules/*"],
+    "plugins": ["import", "jsdoc", "oxc", "typescript", "unicorn", "vitest"],
+    "categories": {
+        "perf": "warn",
+        "suspicious": "warn",
+    },
+    "rules": {
+        // Disallow inline `type` specifiers in favor of separate `import type` statements
+        "import/consistent-type-specifier-style": ["warn", "prefer-top-level"],
+        // Prefer named exports over default exports for better refactorability and IDE support
+        "import/no-default-export": "warn",
+        // Merge duplicate imports from the same module into a single statement
+        "import/no-duplicates": "warn",
+        // Sort named import members, leaving declaration order to the formatter's `sortImports`
+        "sort-imports": ["warn", { "ignoreDeclarationSort": true, "ignoreCase": true }],
+        // Enforce `import type` for type-only imports, matching the `preferTypeOnlyAutoImports`
+        // VS Code setting
+        "typescript/consistent-type-imports": [
+            "warn",
+            { "prefer": "type-imports", "fixStyle": "separate-type-imports" },
+        ],
+    },
+    "overrides": [
+        {
+            // Tooling config files conventionally use default exports (config objects)
+            "files": ["./*.config.{js,ts,mjs,mts}"],
+            "rules": {
+                "import/no-default-export": "off",
+            },
+        },
+    ],
+}

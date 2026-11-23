@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
 import { relative } from 'node:path'
+
 import { glob } from 'glob'
 import { minimatch } from 'minimatch'
 
@@ -67,9 +68,7 @@ function normalizeFilePaths(filePaths: string[]) {
         // We only unescape non-alphanumeric characters since shells don't escape letters/digits,
         // but Windows separators are typically followed by alphanumeric directory names.
         // This preserves mixed paths like src/utils\file.ts (valid on Windows).
-        const normalized = filePath.includes('/')
-            ? filePath.replace(/\\([^a-zA-Z0-9])/g, '$1')
-            : filePath
+        const normalized = filePath.includes('/') ? filePath.replace(/\\([^a-zA-Z0-9])/g, '$1') : filePath
 
         // Handle absolute paths by converting to cwd-relative
         if (normalized.startsWith('/')) {

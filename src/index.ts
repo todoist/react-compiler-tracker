@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
 import { join, relative } from 'node:path'
-import type { Logger as ReactCompilerLogger } from 'babel-plugin-react-compiler'
+
 import { parseArgs } from './args.js'
 import * as babel from './babel.js'
 import { loadConfig } from './config.js'
-import type { FileErrors } from './records-file.js'
 import * as recordsFile from './records-file.js'
 import * as sourceFiles from './source-files.js'
 import { pluralize } from './utils.js'
+
+import type { Logger as ReactCompilerLogger } from 'babel-plugin-react-compiler'
+import type { FileErrors } from './records-file.js'
 
 const compilerErrors: Map<string, FileErrors> = new Map()
 
@@ -27,11 +29,7 @@ const customReactCompilerLogger: ReactCompilerLogger = {
 
         const relativePath = relative(process.cwd(), filename)
 
-        if (
-            event.kind === 'CompileError' ||
-            event.kind === 'CompileSkip' ||
-            event.kind === 'PipelineError'
-        ) {
+        if (event.kind === 'CompileError' || event.kind === 'CompileSkip' || event.kind === 'PipelineError') {
             const current = compilerErrors.get(relativePath) || {}
             current[event.kind] = (current[event.kind] ?? 0) + 1
             compilerErrors.set(relativePath, current)
@@ -43,10 +41,7 @@ const customReactCompilerLogger: ReactCompilerLogger = {
                 // Use primaryLocation() for precise error location, fall back to fnLoc
                 // primaryLocation() may return a symbol (GeneratedSource), so check for object
                 const loc = event.detail.primaryLocation()
-                line =
-                    (loc && typeof loc === 'object' ? loc.start.line : null) ??
-                    event.fnLoc?.start.line ??
-                    null
+                line = (loc && typeof loc === 'object' ? loc.start.line : null) ?? event.fnLoc?.start.line ?? null
                 reason = event.detail.reason
             } else if (event.kind === 'CompileSkip') {
                 // CompileSkip has its own loc field for the precise location
@@ -144,9 +139,7 @@ async function runOverwriteRecords({
         exitWithWarning('No files to check')
     }
 
-    console.log(
-        `🔍 Checking all ${filePaths.length} source files for React Compiler errors and recreating records…`,
-    )
+    console.log(`🔍 Checking all ${filePaths.length} source files for React Compiler errors and recreating records…`)
 
     //
     // Compile files and update `compilerErrors` with `customReactCompilerLogger`
@@ -207,8 +200,7 @@ async function runStageRecords({
     const recordedFilePaths = records ? Object.keys(records.files) : []
     const { deleted: deletedFromRecords } = sourceFiles.partitionByExistence(recordedFilePaths)
 
-    const { existing: existingFilePaths, deleted: deletedFromInput } =
-        sourceFiles.partitionByExistence(filePaths)
+    const { existing: existingFilePaths, deleted: deletedFromInput } = sourceFiles.partitionByExistence(filePaths)
 
     const allDeletedFilePaths = [...new Set([...deletedFromRecords, ...deletedFromInput])]
     const allFilePaths = [...new Set([...filePaths, ...deletedFromRecords])]
@@ -221,9 +213,7 @@ async function runStageRecords({
     if (allDeletedFilePaths.length > 0) {
         const deletedFileWord = pluralize(allDeletedFilePaths.length, 'file', 'files')
         const fileList = allDeletedFilePaths.map((f) => `  • ${f}`).join('\n')
-        console.log(
-            `🗑️  Removing ${allDeletedFilePaths.length} deleted ${deletedFileWord} from records:\n${fileList}`,
-        )
+        console.log(`🗑️  Removing ${allDeletedFilePaths.length} deleted ${deletedFileWord} from records:\n${fileList}`)
     }
 
     if (!existingFilePaths.length) {
@@ -309,13 +299,7 @@ async function runCheckFiles({
  *
  * The records file is not updated.
  */
-async function runCheckAllFiles({
-    sourceGlob,
-    showErrors,
-}: {
-    sourceGlob: string
-    showErrors: boolean
-}) {
+async function runCheckAllFiles({ sourceGlob, showErrors }: { sourceGlob: string; showErrors: boolean }) {
     const filePaths = sourceFiles.getAll({
         globPattern: sourceGlob,
     })
@@ -404,9 +388,7 @@ function checkErrorChanges({
     // Report decreases first so users see their progress even if there are also increases
     const decreaseEntries = Object.entries(decreases)
     if (decreaseEntries.length) {
-        const decreaseList = decreaseEntries.map(
-            ([filePath, count]) => `  • ${filePath}: -${count}`,
-        )
+        const decreaseList = decreaseEntries.map(([filePath, count]) => `  • ${filePath}: -${count}`)
         console.log(`🎉 React Compiler errors have decreased in:\n${decreaseList.join('\n')}`)
         if (increaseEntries.length) {
             console.log() // blank line separator
