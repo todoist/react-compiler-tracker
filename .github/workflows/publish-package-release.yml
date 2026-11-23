@@ -1,0 +1,123 @@
+name: Package Release
+
+on:
+    push:
+        branches:
+            - main
+            - next
+
+permissions:
+    # Enable the use of OIDC for trusted publishing and npm provenance
+    id-token: write
+    # Enable the use of GitHub Packages registry
+    packages: write
+    # Enable the CI validation workflow to checkout the repository
+    contents: read
+
+# The release workflow involves many crucial steps that once triggered shouldn't be cancelled until
+# finished, otherwise we might end up in an inconsistent state (e.g., published to GitHub Packages
+# but not npm), so new workflow runs are queued until the previous one has completely finished.
+concurrency:
+    group: ${{ github.workflow }}
+    cancel-in-progress: false
+
+jobs:
+    ci-validation:
+        name: CI Validation
+        uses: ./.github/workflows/check-ci-validation.yml
+
+    release-and-publish:
+        name: Release & Publish
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+
+        needs: ci-validation
+
+        steps:
+            - name: Generate release bot token
+              id: release-bot
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.DOIST_RELEASE_BOT_ID }}
+                  private-key: ${{ secrets.DOIST_RELEASE_BOT_PRIVATE_KEY }}
+                  permission-contents: write
+                  permission-issues: write
+                  permission-pull-requests: write
+
+            - name: Checkout repository
+              uses: actions/checkout@v6
+              with:
+                  token: ${{ steps.release-bot.outputs.token }}
+                  fetch-depth: 0
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              id: node-modules-cache
+              uses: actions/cache@v5
+              with:
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Build package
+              run: |
+                  npm run build
+
+            # `semantic-release` publishes to the public npm registry with OIDC authentication, as
+            # the repo's `.npmrc` maps the `@todoist` scope to it. Afterwards, that mapping is
+            # removed and the Node.js environment is prepared for the GitHub Packages registry,
+            # which maps the `@todoist` scope to it, providing a predictable release workflow for
+            # both registries.
+            - name: Publish package to public npm registry
+              id: semantic-release
+              run: |
+                  npx semantic-release
+              env:
+                  # `semantic-release` commits and pushes without `--no-verify`. Since changes are
+                  # already validated at this point, there is no need to run husky again.
+                  HUSKY: "0"
+                  GITHUB_TOKEN: ${{ steps.release-bot.outputs.token }}
+                  GIT_AUTHOR_EMAIL: doistbot@users.noreply.github.com
+                  GIT_AUTHOR_NAME: Doist Bot
+                  GIT_COMMITTER_EMAIL: doistbot@users.noreply.github.com
+                  GIT_COMMITTER_NAME: Doist Bot
+
+            - name: Remove public npm registry mapping for the `@todoist` scope from `.npmrc`
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              run: |
+                  npm config delete @todoist:registry --location=project
+
+            - name: Prepare Node.js environment for GitHub Packages registry
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+                  registry-url: https://npm.pkg.github.com/
+                  scope: "@todoist"
+
+            - name: Determine npm dist-tag for GitHub Packages
+              id: dist-tag
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              run: |
+                  if [[ "${{ github.ref_name }}" == "next" ]]; then
+                    echo "tag=next" >> $GITHUB_OUTPUT
+                  else
+                    echo "tag=latest" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Publish package to private GitHub Packages registry
+              if: ${{ steps.semantic-release.outputs.package-published == 'true' }}
+              run: |
+                  npm publish --tag ${{ steps.dist-tag.outputs.tag }}
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

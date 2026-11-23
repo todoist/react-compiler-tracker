@@ -1,6 +1,7 @@
 # React Compiler Tracker
 
 [![npm version](https://img.shields.io/npm/v/@todoist/react-compiler-tracker)](https://www.npmjs.com/package/@todoist/react-compiler-tracker)
+[![semantic-release: Conventional Commits](https://img.shields.io/badge/semantic--release-Conventional%20Commits-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js](https://img.shields.io/node/v/@todoist/react-compiler-tracker)](https://nodejs.org/)
 
@@ -167,12 +168,6 @@ if [ -n "$FILES" ]; then
   npm exec --no -- @todoist/react-compiler-tracker --stage-record-file $FILES
 fi
 ```
-
-## Releasing
-
-This project uses [release-please](https://github.com/googleapis/release-please) to automate releases. Commits merged to `main` with `fix:` trigger patch releases, `feat:` triggers minor releases, and `feat!:` or `fix!:` triggers major releases.
-
-When commits land on `main`, release-please creates a release PR. Merging it creates the normal version tag and GitHub release, then builds and retains the release artifact. An authorized maintainer publishes that same artifact to npm and the private GitHub Packages mirror using the [release runbook](docs/releasing.md).
 
 ## License
 

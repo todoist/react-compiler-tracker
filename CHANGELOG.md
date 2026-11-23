@@ -1,7 +1,3 @@
-# Changelog
-
-This file documents all notable changes, following the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
-
 ## [3.0.5](https://github.com/todoist/react-compiler-tracker/compare/react-compiler-tracker-v3.0.4...react-compiler-tracker-v3.0.5) (2026-11-11)
 
 
