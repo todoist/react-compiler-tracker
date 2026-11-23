@@ -169,6 +169,10 @@ if [ -n "$FILES" ]; then
 fi
 ```
 
+## Contributing
+
+If you're interested in contributing code and/or documentation, please read our [contributing guide](CONTRIBUTING.md).
+
 ## License
 
 Released under the [MIT License](https://opensource.org/licenses/MIT).
