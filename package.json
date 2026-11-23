@@ -37,6 +37,13 @@
   "engines": {
     "node": ">=22.0.0"
   },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">= 26.13.0",
+      "onFail": "error"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -47,11 +54,13 @@
     "*.{js,mjs,ts,json,md}": "biome check --write --no-errors-on-unmatched"
   },
   "devDependencies": {
-    "rimraf": "6.1.4",
     "@babel/core": "7.29.13",
     "@babel/preset-react": "7.29.7",
     "@babel/preset-typescript": "7.29.7",
     "@biomejs/biome": "2.6.8",
+    "@semantic-release/changelog": "7.0.0",
+    "@semantic-release/exec": "7.1.0",
+    "@semantic-release/git": "11.0.1",
     "@todoist/tsconfig": "2.0.2",
     "@types/babel__core": "7.20.5",
     "@types/node": "26.6.6",
@@ -59,6 +68,8 @@
     "husky": "9.1.7",
     "lint-staged": "17.6.1",
     "npm-run-all2": "9.0.4",
+    "rimraf": "6.1.4",
+    "semantic-release": "26.0.1",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
     "vitest": "5.1.0"

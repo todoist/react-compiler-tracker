@@ -6,6 +6,11 @@
             "matchPackageNames": ["@babel/**"],
             "matchUpdateTypes": ["major"],
             "enabled": false
+        },
+        {
+            "description": "Keep devEngines.runtime as a minimum Node.js version instead of pinning it.",
+            "matchDepTypes": ["devEngines.runtime"],
+            "rangeStrategy": "auto"
         }
     ],
     "schedule": ["before 7am every weekday"],

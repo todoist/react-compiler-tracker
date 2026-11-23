@@ -18,7 +18,9 @@ Every significant change is documented in the [CHANGELOG.md](CHANGELOG.md) file.
 
 ## Branch Organization
 
-Submit all changes directly to the [main](https://github.com/todoist/react-compiler-tracker/tree/main) branch. We don't use separate branches for development or for upcoming releases. We do our best to keep `main` in good shape, with all tests passing.
+Submit all changes directly to the [main](https://github.com/todoist/react-compiler-tracker/tree/main) branch. We do our best to keep `main` in good shape, with all tests passing.
+
+For pre-release testing, the `next` branch is used to publish pre-release versions to npm before promoting to stable. See [Release Process](#release-process-core-team-only) for details.
 
 ## Proposing a Change
 
@@ -51,7 +53,7 @@ cd react-compiler-tracker
 
 After cloning react-compiler-tracker and installing all dependencies, several commands are at your disposal:
 
--   `npm run build`: Builds the `@todoist/react-compiler-tracker` package for publishing to [npm](https://www.npmjs.com/);
+-   `npm run build`: Builds the `@todoist/react-compiler-tracker` package for publishing to [npm](https://www.npmjs.com/) and [GitHub Packages](https://github.com/orgs/todoist/packages?repo_name=react-compiler-tracker);
 -   `npm run check`: Validates code quality and types with Biome and TypeScript;
 -   `npm run fix`: Automatically fixes linting issues with Biome;
 -   `npm run test`: Runs all unit tests with Vitest;
@@ -59,7 +61,27 @@ After cloning react-compiler-tracker and installing all dependencies, several co
 
 ### Release Process (core team only)
 
-The release process for react-compiler-tracker is automated with [release-please](https://github.com/googleapis/release-please). When commits following the [Conventional Commits](https://www.conventionalcommits.org/) specification are merged to `main`, release-please automatically creates or updates a release PR. When that PR is merged, the normal version tag and GitHub release are created and a build/pack-only workflow retains the artifact. Publication is a separate, approved step using the [release runbook](docs/releasing.md).
+The release process for react-compiler-tracker is fully automated with [`semantic-release`](https://github.com/semantic-release/semantic-release). Pushing to `main` (after CI passes) triggers a stable release automatically.
+
+#### Pre-releases
+
+To test features before publishing a stable release:
+
+1. **Sync `next` with `main`** before starting new work, and after each stable release (required for `semantic-release` to correctly initiate the next pre-release versioning cycle):
+
+   ```sh
+   git checkout next
+   git merge main -m "chore: sync next with main [skip ci]"
+   git push origin next
+   ```
+
+2. **Develop on a feature branch** based off `next` and open a PR targeting `next`.
+
+3. **Automatic pre-release:** Each PR merge into `next` triggers CI → a pre-release version (e.g., `4.0.0-next.1`) is published to the `@next` dist-tag on npm and GitHub Packages.
+
+4. **Promote to stable:** When ready, open a PR to merge `next` into `main`. The PR title must follow [Conventional Commits](https://www.conventionalcommits.org/) (e.g., `feat: ...`, `fix: ...`) as it determines the version bump for the stable release.
+
+> **Note:** The `CHANGELOG.md` is only updated for stable releases on `main`. Pre-releases still get GitHub release notes and npm publication.
 
 ## Sending a Pull Request
 
@@ -100,6 +122,16 @@ As a quick summary, each commit message consists of a **header**, an **optional 
 Commit types, such as `feat:` or `fix:`, are the only ones that will affect versioning and `CHANGELOG.md` generation, whereas commit types such as `build:`, `chore:`, `ci:`, `docs:`, `perf:`, `refactor:`, `revert:`, `style:` and `test:` will not. They are still valid, and it would be great if you could use them when appropriate.
 
 A commit that has the text `BREAKING CHANGE:` at the beginning of its optional body or footer section, or appends a `!` after the type/scope, introduces a breaking API change (correlating with `MAJOR` in Semantic Versioning). A breaking change can be part of commits of any _type_.
+
+#### How Commits Map to the CHANGELOG
+
+The commit **header** (subject line) and footer metadata — including `BREAKING CHANGE:` notes and issue references (e.g., `Closes #123`) — are used to generate the `CHANGELOG.md`. The commit body is ignored by the changelog generator.
+
+When squash-merging a PR, GitHub lets you edit the commit message and extended description. Keep the following in mind:
+
+-   The **commit message** (header) becomes the entry under its type section (e.g., Features, Bug Fixes).
+-   A `BREAKING CHANGE:` **footer** in the extended description becomes a separate entry in the Breaking Changes section. Use it to describe the impact for consumers.
+-   Using `!` in the header without a `BREAKING CHANGE:` footer will duplicate the subject line in both the type section and the Breaking Changes section. To avoid this, always include a `BREAKING CHANGE:` footer with a distinct description when introducing breaking changes.
 
 ## License
 

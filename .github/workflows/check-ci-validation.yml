@@ -1,0 +1,153 @@
+name: CI Validation
+
+on:
+    workflow_call:
+    pull_request:
+        types:
+            - opened
+            - reopened
+            - synchronize
+
+# Restrict permissions to read-only since validation jobs only need to checkout
+# and analyse the code. This limits the blast radius when called from workflows
+# that have broader permissions (e.g., the release workflow).
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    prepare-workflow:
+        name: Prepare Workflow
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              id: node-modules-cache
+              uses: actions/cache@v5
+              with:
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+    static-code-analysis:
+        name: Static Code Analysis
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              id: node-modules-cache
+              uses: actions/cache@v5
+              with:
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Check formatting and lint code with Biome
+              run: |
+                  npm run check:biome
+
+            - name: Perform type checking with TypeScript
+              run: |
+                  npm run check:types
+
+    unit-testing:
+        name: Unit Testing
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              id: node-modules-cache
+              uses: actions/cache@v5
+              with:
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Test codebase correctness
+              run: |
+                  npm run test
+
+    build-package:
+        name: Build Package
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+
+        needs:
+            - prepare-workflow
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v6
+
+            - name: Prepare Node.js environment
+              uses: actions/setup-node@v6
+              with:
+                  cache: npm
+                  node-version-file: .node-version
+
+            - name: Cache project 'node_modules' directory
+              id: node-modules-cache
+              uses: actions/cache@v5
+              with:
+                  key: node-modules-cache-${{ hashFiles('package.json', '**/package-lock.json', '**/.node-version') }}
+                  path: node_modules/
+
+            - name: Install project npm dependencies
+              if: ${{ steps.node-modules-cache.outputs.cache-hit != 'true' }}
+              run: |
+                  npm ci
+
+            - name: Build `@todoist/react-compiler-tracker` package
+              run: |
+                  npm run build
