@@ -8,7 +8,7 @@
     "react-compiler-tracker": "dist/index.js"
   },
   "scripts": {
-    "check": "run-p check:* -c -l",
+    "check": "run-p check:* -c -l -t",
     "check:format": "oxfmt --check",
     "check:lint": "oxlint",
     "check:types": "tsc --noEmit",
@@ -69,7 +69,7 @@
     "@types/node": "26.6.6",
     "babel-plugin-react-compiler": "1.0.0",
     "lefthook": "2.2.2",
-    "npm-run-all2": "9.0.4",
+    "npm-run-all-next": "1.4.2",
     "oxfmt": "0.79.0",
     "oxlint": "1.94.0",
     "publint": "0.3.25",

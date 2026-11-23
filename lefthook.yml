@@ -8,7 +8,9 @@ pre-commit:
           run: npm run fix:format -- {staged_files}
           glob: '*.{js,jsx,ts,tsx,mts,css,json,jsonc,md,mdx,yml,yaml,html,svg}'
           exclude:
+              - AGENTS.md
               - CHANGELOG.md
+              - docs/**
               - package.json
               - package-lock.json
           stage_fixed: true
