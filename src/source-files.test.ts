@@ -7,16 +7,16 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { filterByGlob, getAll, normalizeFilePaths, partitionByExistence, validateFilesExist } from './source-files.js'
 
 vi.mock('node:child_process', () => ({
-    execSync: vi.fn(),
+    execSync: vi.fn<typeof execSync>(),
 }))
 
 vi.mock('node:fs', () => ({
-    existsSync: vi.fn(),
+    existsSync: vi.fn<typeof existsSync>(),
 }))
 
 vi.mock('glob', () => ({
     glob: {
-        sync: vi.fn(),
+        sync: vi.fn<typeof glob.sync>(),
     },
 }))
 

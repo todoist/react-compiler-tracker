@@ -46,6 +46,7 @@ function loadConfig(): Config {
             ...parsed,
         }
     } catch (error) {
+        // oxlint-disable-next-line preserve-caught-error
         throw new Error(`Failed to parse config at ${configPath}: ${error}`)
     }
 }

@@ -5,8 +5,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { DEFAULT_CONFIG, loadConfig } from './config.js'
 
 vi.mock('node:fs', () => ({
-    existsSync: vi.fn(),
-    readFileSync: vi.fn(),
+    existsSync: vi.fn<typeof existsSync>(),
+    readFileSync: vi.fn<typeof readFileSync>(),
 }))
 
 afterEach(() => {

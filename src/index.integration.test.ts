@@ -1,17 +1,15 @@
 import { execSync } from 'node:child_process'
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { join } from 'node:path'
 
 import { afterEach, describe, expect, it } from 'vitest'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const fixtureDir = join(__dirname, '__fixtures__/sample-project')
+const fixtureDir = join(import.meta.dirname, '__fixtures__/sample-project')
 const recordsPath = join(fixtureDir, '.react-compiler.rec.json')
 const configPath = join(fixtureDir, '.react-compiler-tracker.config.json')
 
 function runCLI(args: string[] = [], cwd = fixtureDir): string {
-    const cliPath = join(__dirname, 'index.ts')
+    const cliPath = join(import.meta.dirname, 'index.ts')
     try {
         return execSync(`npm exec --no -- tsx ${cliPath} ${args.join(' ')} 2>&1`, {
             cwd,
@@ -40,7 +38,7 @@ describe('CLI', () => {
 
             expect(output).toContain('🔍 Checking all 5 source files for React Compiler errors…')
             expect(output).toContain('⚠️  Found 4 React Compiler issues across 2 files')
-            expect(() => JSON.parse(readFileSync(recordsPath, 'utf8'))).toThrow()
+            expect(existsSync(recordsPath)).toBe(false)
         })
 
         it('--show-errors works with default check-all', () => {
@@ -65,7 +63,7 @@ describe('CLI', () => {
             expect(output).toContain('Please fix the errors and run the command again.')
             expect(output).not.toContain('src/good-component.tsx')
             expect(output).not.toContain('src/good-hook.ts')
-            expect(() => JSON.parse(readFileSync(recordsPath, 'utf8'))).toThrow()
+            expect(existsSync(recordsPath)).toBe(false)
         })
 
         it('errors when file does not exist', () => {

@@ -102,10 +102,11 @@ function save({
         recordVersion: RECORD_VERSION,
         'react-compiler-version': reactCompiler.getVersion(),
         files: Object.entries(newFileRecords)
+            // oxlint-disable-next-line unicorn/no-array-sort
             .sort(([filePathA], [filePathB]) => filePathA.localeCompare(filePathB))
-            .reduce<Records['files']>((records, [filePath, errors]) => {
-                records[filePath] = errors
-                return records
+            .reduce<Records['files']>((sortedFiles, [filePath, errors]) => {
+                sortedFiles[filePath] = errors
+                return sortedFiles
             }, {}),
     }
 

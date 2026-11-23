@@ -3,13 +3,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { getErrorChanges, load, save } from './records-file.js'
 
 vi.mock('node:fs', () => ({
-    existsSync: vi.fn(),
-    readFileSync: vi.fn(),
-    writeFileSync: vi.fn(),
+    existsSync: vi.fn<typeof existsSync>(),
+    readFileSync: vi.fn<typeof readFileSync>(),
+    writeFileSync: vi.fn<typeof writeFileSync>(),
 }))
 
 vi.mock('./react-compiler.js', () => ({
-    getVersion: vi.fn(() => '1.0.0'),
+    getVersion: vi.fn<() => string>(() => '1.0.0'),
 }))
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
@@ -153,7 +153,7 @@ describe('load', () => {
         vi.mocked(existsSync).mockReturnValue(true)
         vi.mocked(readFileSync).mockReturnValue('not valid json')
 
-        vi.stubGlobal('console', { warn: vi.fn(), log: console.log })
+        vi.stubGlobal('console', { warn: vi.fn<typeof console.warn>(), log: console.log })
 
         const result = load('/path/to/records.json')
 
