@@ -1,3 +1,9 @@
+## [3.0.7](https://github.com/todoist/react-compiler-tracker/compare/v3.0.6...v3.0.7) (2026-11-25)
+
+### Bug Fixes
+
+* **deps:** update dependency minimatch to v11.0.9 ([#255](https://github.com/todoist/react-compiler-tracker/issues/255)) ([5765683](https://github.com/todoist/react-compiler-tracker/commit/57656831bc4b779562a56d59995bc319a8a08bbd))
+
 ## [3.0.6](https://github.com/todoist/react-compiler-tracker/compare/v3.0.5...v3.0.6) (2026-11-23)
 
 ### Bug Fixes
